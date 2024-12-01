@@ -11,6 +11,12 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: 'var(--primary)',
+        secondary: 'var(--secondary)',
+        mutedPurple: 'var(--primary)',
+        softPink: 'var(--secondary)',
+        lightPink: 'var(--light-pink)',
+        cream: 'var(--cream)',
       },
     },
   },
