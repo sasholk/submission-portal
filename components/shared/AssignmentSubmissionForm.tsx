@@ -5,13 +5,16 @@ import { submitForm } from '@/services/submit'
 import { FormFieldEnum } from '@/types/form'
 import { formSchema, FormSchema } from '@/utils/validation/form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import cn from 'classnames'
 import { redirect } from 'next/navigation'
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import ErrorMessage from '../ui/ErrorMessage'
 import FormField from './FormField'
 import SelectField from './SelectField'
 
 export default function AssignmentSubmissionForm() {
+  const [formError, setFormError] = useState<string | null>(null)
   // initialize the useForm hook with the Zod resolver and default values
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -19,17 +22,17 @@ export default function AssignmentSubmissionForm() {
       name: '',
       email: '',
       assignmentDescription: '',
-      githubUrl: '',
+      githubRepoUrl: '',
       candidateLevel: undefined,
     },
-    mode: 'onBlur',
+    mode: 'all',
   })
 
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty, isValid },
   } = form
 
   const {
@@ -43,25 +46,40 @@ export default function AssignmentSubmissionForm() {
     formData.append('name', data.name)
     formData.append('email', data.email)
     formData.append('assignmentDescription', data.assignmentDescription)
-    formData.append('githubUrl', data.githubUrl)
+    formData.append('githubRepoUrl', data.githubRepoUrl)
     formData.append('candidateLevel', data.candidateLevel)
 
     // call the action
-    const { data: success, errors: formError } = await submitForm(formData)
+    const { data: success, errors: submitError } = await submitForm(formData)
 
-    if (formError) {
+    if (submitError) {
+      setFormError(
+        Array.isArray(submitError)
+          ? submitError[0].message
+          : submitError.message
+      )
     }
 
     if (success) {
-      redirect(`/thank-you`)
+      const queryParams = new URLSearchParams({
+        name: data.name,
+        email: data.email,
+        assignmentDescription: data.assignmentDescription,
+        githubRepoUrl: data.githubRepoUrl,
+        candidateLevel: data.candidateLevel,
+      }).toString()
+
+      redirect(`/thank-you?${queryParams}`)
     }
   }
+
+  const isDisabled = isSubmitting || !isValid
 
   return (
     <div className='bg-secondary shadow-custom shadow-pink-50 rounded-lg p-8 max-w-lg w-full text-background'>
       <h1 className='text-2xl font-bold mb-6'>Assignment Submission Form</h1>
 
-      <ErrorMessage message={levelsError} />
+      <ErrorMessage message={formError} />
 
       <form onSubmit={handleSubmit(onSubmitForm)} className='space-y-4'>
         <FormField
@@ -85,34 +103,46 @@ export default function AssignmentSubmissionForm() {
           error={errors.assignmentDescription}
         />
         <FormField
-          id={FormFieldEnum.GithubUrl}
+          id={FormFieldEnum.githubRepoUrl}
           label='GitHub Repository URL'
           type='url'
           register={register}
-          error={errors.githubUrl}
+          error={errors.githubRepoUrl}
         />
         {isLevelsLoading ? (
           <p>Loading candidate levels...</p>
         ) : (
-          <SelectField
-            id={FormFieldEnum.CandidateLevel}
-            label='Candidate Level'
-            options={levels.map((level: string) => ({
-              value: level,
-              label: level,
-            }))}
-            control={control}
-            register={register}
-            error={errors.candidateLevel}
-          />
+          <>
+            {(levelsError || !levels.length) && (
+              <ErrorMessage
+                message={levelsError || 'Error to fetch candidate levels'}
+              />
+            )}
+
+            <SelectField
+              id={FormFieldEnum.CandidateLevel}
+              label='Candidate Level'
+              options={levels.map((level: string) => ({
+                value: level,
+                label: level,
+              }))}
+              control={control}
+              register={register}
+              error={errors.candidateLevel}
+            />
+          </>
         )}
 
         <button
-          disabled={isSubmitting}
-          className='w-full bg-primary py-2 text-foreground px-4 rounded-md shadow-sm hover:bg-primary hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary'
+          disabled={isDisabled}
+          className={cn(
+            'w-full bg-primary py-2 text-foreground px-4 rounded-md shadow-sm hover:bg-primary hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary',
+            {
+              'opacity-50 cursor-not-allowed hover:opacity-50': isDisabled,
+            }
+          )}
         >
           {isSubmitting ? 'Submitting...' : 'Submit Assignment'}
-          {/* Submit Assignment */}
         </button>
       </form>
     </div>

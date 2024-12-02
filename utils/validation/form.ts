@@ -6,7 +6,7 @@ export const formSchema = z.object({
   assignmentDescription: z.string().min(10, {
     message: 'Description must be at least 10 character',
   }),
-  githubUrl: z
+  githubRepoUrl: z
     .string()
     .url()
     .includes('github.com', { message: 'Invalid GitHub URL' }),

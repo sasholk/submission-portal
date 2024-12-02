@@ -2,6 +2,6 @@ export enum FormFieldEnum {
   Name = 'name',
   Email = 'email',
   AssignmentDescription = 'assignmentDescription',
-  GithubUrl = 'githubUrl',
+  githubRepoUrl = 'githubRepoUrl',
   CandidateLevel = 'candidateLevel',
 }

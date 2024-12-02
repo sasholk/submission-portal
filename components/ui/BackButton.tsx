@@ -14,7 +14,7 @@ export function BackButton({}: Props) {
     <button
       className='flex gap-2 rounded-md bg-primary p-2 text-cream hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary w-fit'
       type='button'
-      onClick={() => router.back()}
+      onClick={() => router.replace('/')}
     >
       <MoveLeft />
       Go back

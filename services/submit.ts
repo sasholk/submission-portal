@@ -1,5 +1,6 @@
 import { formSchema } from '@/utils/validation/form'
 import { z } from 'zod'
+import { transformData } from '../utils/transformData'
 import { postAssignment } from './api'
 
 /**
@@ -26,18 +27,12 @@ export async function submitForm(formData: FormData) {
       name: formData.get('name')?.toString(),
       email: formData.get('email')?.toString(),
       assignmentDescription: formData.get('assignmentDescription')?.toString(),
-      githubUrl: formData.get('githubUrl')?.toString(),
+      githubRepoUrl: formData.get('githubRepoUrl')?.toString(),
       candidateLevel: formData.get('candidateLevel')?.toString(),
     })
 
     // Transform validated fields into the required API format
-    const formattedFields = {
-      name: validatedFields.name,
-      email: validatedFields.email,
-      assignment_description: validatedFields.assignmentDescription,
-      github_repo_url: validatedFields.githubUrl,
-      candidate_level: validatedFields.candidateLevel,
-    }
+    const formattedFields = transformData<FormData>(validatedFields)
 
     // Convert transformed data into FormData for the API call
     const formDataToSend = new FormData()
