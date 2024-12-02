@@ -58,7 +58,7 @@ export default function AssignmentSubmissionForm() {
   }
 
   return (
-    <div className='bg-secondary shadow-md rounded-lg p-8 max-w-lg w-full text-background'>
+    <div className='bg-secondary shadow-custom shadow-pink-50 rounded-lg p-8 max-w-lg w-full text-background'>
       <h1 className='text-2xl font-bold mb-6'>Assignment Submission Form</h1>
 
       <ErrorMessage message={levelsError} />

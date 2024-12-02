@@ -13,11 +13,6 @@ export const formSchema = z.object({
   candidateLevel: z.enum(['Junior', 'Middle', 'Senior', 'Principal'], {
     message: 'Invalid candidate level',
   }),
-  // .object(
-  //   { value: z.string(), label: z.string() },
-  //   { message: 'Invalid candidate level' }
-  // )
-  // .transform(obj => obj.value),
 })
 
 // inferred type can be used elsewhere in code to maintain type safety, ensuring that the data adheres to the schema’s rules.

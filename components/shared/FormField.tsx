@@ -28,8 +28,8 @@ const FormField: React.FC<Props> = ({
 
       {type === 'textarea' ? (
         <textarea
-          id={id}
           {...register(id)}
+          id={id}
           name={id}
           className={cn(
             'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm',
@@ -40,9 +40,9 @@ const FormField: React.FC<Props> = ({
         />
       ) : (
         <input
-          type={type}
-          id={id}
           {...register(id)}
+          id={id}
+          type={type}
           name={id}
           className={cn(
             'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm',
