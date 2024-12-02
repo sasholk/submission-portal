@@ -2,23 +2,35 @@ import { formSchema } from '@/utils/validation/form'
 import { z } from 'zod'
 import { postAssignment } from './api'
 
-export const transformZodErrors = async (error: z.ZodError) => {
+/**
+ * Transforms Zod validation errors into a more readable format.
+ * @param error - The ZodError object containing validation issues.
+ * @returns Array of formatted error objects with path and message.
+ */
+export const transformZodErrors = (error: z.ZodError) => {
   return error.issues.map(issue => ({
-    path: issue.path.join('.'),
-    message: issue.message,
+    path: issue.path.join('.'), // Combine path array into a string
+    message: issue.message, // Human-readable error message
   }))
 }
 
+/**
+ * Submits the form data after validation and transformation.
+ * @param formData - The FormData object from the form submission.
+ * @returns An object containing either errors or success data.
+ */
 export async function submitForm(formData: FormData) {
   try {
+    // Validate form data using Zod schema
     const validatedFields = formSchema.parse({
-      name: formData.get('name'),
-      email: formData.get('email'),
-      assignmentDescription: formData.get('assignmentDescription'),
-      githubUrl: formData.get('githubUrl'),
-      candidateLevel: formData.get('candidateLevel'),
+      name: formData.get('name')?.toString(),
+      email: formData.get('email')?.toString(),
+      assignmentDescription: formData.get('assignmentDescription')?.toString(),
+      githubUrl: formData.get('githubUrl')?.toString(),
+      candidateLevel: formData.get('candidateLevel')?.toString(),
     })
 
+    // Transform validated fields into the required API format
     const formattedFields = {
       name: validatedFields.name,
       email: validatedFields.email,
@@ -27,24 +39,33 @@ export async function submitForm(formData: FormData) {
       candidate_level: validatedFields.candidateLevel,
     }
 
-    await postAssignment(formattedFields)
+    // Convert transformed data into FormData for the API call
+    const formDataToSend = new FormData()
+    Object.entries(formattedFields).forEach(([key, value]) => {
+      if (value !== undefined) formDataToSend.append(key, value)
+    })
 
-    // send validated data to database here
+    // Send data to the API
+    await postAssignment(formDataToSend)
+
+    // Return success response
     return {
       errors: null,
-      data: 'data received and mutated',
+      data: 'Data received and processed successfully.',
     }
   } catch (error) {
     if (error instanceof z.ZodError) {
+      // Handle Zod validation errors
       return {
         errors: transformZodErrors(error),
         data: null,
       }
     }
 
+    // Handle unexpected errors
     return {
       errors: {
-        message: 'An unexpected error occurred. Could not create shelf.',
+        message: 'An unexpected error occurred. Please try again later.',
       },
       data: null,
     }

@@ -1,25 +1,23 @@
+import { FormFieldEnum } from '@/types/form'
 import { FormSchema } from '@/utils/validation/form'
+import cn from 'classnames'
 import React from 'react'
 import {
   Control,
   Controller,
-  FieldErrors,
+  FieldError,
   UseFormRegister,
 } from 'react-hook-form'
 import Select from 'react-select'
+import ErrorMessage from '../ui/ErrorMessage'
 
 interface SelectFieldProps {
-  id:
-    | 'name'
-    | 'email'
-    | 'assignmentDescription'
-    | 'githubUrl'
-    | 'candidateLevel'
+  id: FormFieldEnum
   label: string
   options: { value: string; label: string }[]
   control: Control<FormSchema>
   register: UseFormRegister<FormSchema>
-  errors: FieldErrors<FormSchema>
+  error?: FieldError
 }
 
 const SelectField: React.FC<SelectFieldProps> = ({
@@ -27,23 +25,23 @@ const SelectField: React.FC<SelectFieldProps> = ({
   label,
   options,
   control,
-  register,
-  errors,
+  error,
 }) => {
   return (
-    <div>
+    <div className='flex flex-col gap-1'>
       <label htmlFor={id} className='block text-sm font-medium text-gray-700'>
         {label}
       </label>
+
       <Controller
-        {...register(id)}
+        name={id}
         control={control}
-        rules={{ required: true }}
         render={({ field }) => (
           <Select
             {...field}
-            id={id}
             options={options}
+            className={cn('rounded-md', { 'border-2 border-red-500': error })}
+            id={id}
             isClearable
             onChange={selectedOption => {
               // Update the value correctly for react-hook-form
@@ -63,7 +61,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
           />
         )}
       />
-      <p className='text-red-700 mt-1'>{errors[id] && errors[id].message}</p>
+
+      {error && <ErrorMessage message={error.message} />}
     </div>
   )
 }

@@ -2,10 +2,12 @@
 
 import { useCandidateLevels } from '@/hooks/useCandidateLevels'
 import { submitForm } from '@/services/submit'
+import { FormFieldEnum } from '@/types/form'
 import { formSchema, FormSchema } from '@/utils/validation/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { redirect } from 'next/navigation'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import ErrorMessage from '../ui/ErrorMessage'
 import FormField from './FormField'
 import SelectField from './SelectField'
 
@@ -18,8 +20,9 @@ export default function AssignmentSubmissionForm() {
       email: '',
       assignmentDescription: '',
       githubUrl: '',
-      candidateLevel: '',
+      candidateLevel: undefined,
     },
+    mode: 'onBlur',
   })
 
   const {
@@ -31,13 +34,9 @@ export default function AssignmentSubmissionForm() {
 
   const {
     levels,
-    // error: levelsError,
+    error: levelsError,
     isLoading: isLevelsLoading,
   } = useCandidateLevels()
-  // const { mutate: submitAssignment, isLoading: isSubmitting } =
-  //   useSubmitAssignment()
-
-  console.log(levels)
 
   const onSubmitForm: SubmitHandler<FormSchema> = async data => {
     const formData = new FormData()
@@ -62,36 +61,41 @@ export default function AssignmentSubmissionForm() {
     <div className='bg-secondary shadow-md rounded-lg p-8 max-w-lg w-full text-background'>
       <h1 className='text-2xl font-bold mb-6'>Assignment Submission Form</h1>
 
-      {/* <ErrorMessage message={levelsError || formError} /> */}
+      <ErrorMessage message={levelsError} />
 
       <form onSubmit={handleSubmit(onSubmitForm)} className='space-y-4'>
-        <FormField id='name' label='Name' register={register} errors={errors} />
         <FormField
-          id='email'
+          id={FormFieldEnum.Name}
+          label='Name'
+          register={register}
+          error={errors.name}
+        />
+        <FormField
+          id={FormFieldEnum.Email}
           label='Email'
           type='email'
           register={register}
-          errors={errors}
+          error={errors.email}
         />
         <FormField
-          id='assignmentDescription'
+          id={FormFieldEnum.AssignmentDescription}
           label='Assignment Description'
           type='textarea'
           register={register}
-          errors={errors}
+          error={errors.assignmentDescription}
         />
         <FormField
-          id='githubUrl'
+          id={FormFieldEnum.GithubUrl}
           label='GitHub Repository URL'
           type='url'
           register={register}
-          errors={errors}
+          error={errors.githubUrl}
         />
         {isLevelsLoading ? (
           <p>Loading candidate levels...</p>
         ) : (
           <SelectField
-            id='candidateLevel'
+            id={FormFieldEnum.CandidateLevel}
             label='Candidate Level'
             options={levels.map((level: string) => ({
               value: level,
@@ -99,9 +103,10 @@ export default function AssignmentSubmissionForm() {
             }))}
             control={control}
             register={register}
-            errors={errors}
+            error={errors.candidateLevel}
           />
         )}
+
         <button
           disabled={isSubmitting}
           className='w-full bg-primary py-2 text-foreground px-4 rounded-md shadow-sm hover:bg-primary hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary'
