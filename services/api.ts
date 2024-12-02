@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios'
+import axios, { AxiosInstance } from 'axios'
 
 /**
  * Axios instance for API communication.
@@ -17,11 +17,9 @@ const axiosInstance: AxiosInstance = axios.create({
  * @returns A promise resolving to the candidate levels data.
  * @throws An error if the request fails.
  */
-export const getCandidateLevels = async (): Promise<any> => {
+export const getCandidateLevels = async () => {
   try {
-    const response: AxiosResponse<any> = await axiosInstance.get(
-      '/candidates/levels'
-    )
+    const response = await axiosInstance.get('/candidates/levels')
     return response.data
   } catch (error) {
     // Log the error or send it to an error-tracking service
@@ -38,14 +36,9 @@ export const getCandidateLevels = async (): Promise<any> => {
  * @returns A promise resolving to the Axios response object.
  * @throws An error if the request fails.
  */
-export const postAssignment = async (
-  data: FormData
-): Promise<AxiosResponse<any>> => {
+export const postAssignment = async (data: FormData) => {
   try {
-    const response: AxiosResponse<any> = await axiosInstance.post(
-      '/candidates/assignments',
-      data
-    )
+    const response = await axiosInstance.post('/candidates/assignments', data)
     return response
   } catch (error) {
     // Handle the error and provide meaningful feedback

@@ -1,5 +1,6 @@
 'use client'
 
+import ErrorMessage from '@/components/ui/ErrorMessage'
 import { useCandidateLevels } from '@/hooks/useCandidateLevels'
 import { submitForm } from '@/services/submit'
 import { FormFieldEnum } from '@/types/form'
@@ -9,9 +10,8 @@ import cn from 'classnames'
 import { redirect } from 'next/navigation'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import ErrorMessage from '../ui/ErrorMessage'
-import FormField from './FormField'
-import SelectField from './SelectField'
+import FormField from '../FormField'
+import SelectField from '../SelectField'
 
 export default function AssignmentSubmissionForm() {
   const [formError, setFormError] = useState<string | null>(null)
@@ -32,7 +32,7 @@ export default function AssignmentSubmissionForm() {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting, isDirty, isValid },
+    formState: { errors, isSubmitting, isValid, isDirty },
   } = form
 
   const {
@@ -73,7 +73,7 @@ export default function AssignmentSubmissionForm() {
     }
   }
 
-  const isDisabled = isSubmitting || !isValid
+  const isDisabled = isSubmitting || !isValid || !isDirty
 
   return (
     <div className='bg-secondary shadow-custom shadow-pink-50 rounded-lg p-8 max-w-lg w-full text-background'>
@@ -136,9 +136,9 @@ export default function AssignmentSubmissionForm() {
         <button
           disabled={isDisabled}
           className={cn(
-            'w-full bg-primary py-2 text-foreground px-4 rounded-md shadow-sm hover:bg-primary hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary',
+            'w-full bg-primary py-2 text-foreground px-4 rounded-md shadow-sm  enabled:transition enabled:hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary',
             {
-              'opacity-50 cursor-not-allowed hover:opacity-50': isDisabled,
+              'opacity-50 cursor-not-allowed': isDisabled,
             }
           )}
         >

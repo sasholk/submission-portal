@@ -42,6 +42,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
             options={options}
             className={cn('rounded-md', { 'border-2 border-red-500': error })}
             id={id}
+            aria-label={label} // Add aria-label for test and accessibility
             isClearable
             onChange={selectedOption => {
               // Update the value correctly for react-hook-form

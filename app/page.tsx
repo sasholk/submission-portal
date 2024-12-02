@@ -1,4 +1,4 @@
-import AssignmentSubmissionForm from '@/components/shared/AssignmentSubmissionForm'
+import AssignmentSubmissionForm from '@/components/shared/AssignmentSubmissionForm/AssignmentSubmissionForm'
 import { Providers } from './providers'
 
 export default function Home() {
