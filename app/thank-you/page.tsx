@@ -1,5 +1,6 @@
 import PostPreview from '@/components/shared/PostPreview'
 import { BackButton } from '@/components/ui/BackButton'
+import { Suspense } from 'react'
 
 export default function ThankYouPage() {
   return (
@@ -10,7 +11,9 @@ export default function ThankYouPage() {
 
       <p className='text-2xl'>We sent this data to server🥳</p>
 
-      <PostPreview />
+      <Suspense fallback={<div>Loading...</div>}>
+        <PostPreview />
+      </Suspense>
     </div>
   )
 }
