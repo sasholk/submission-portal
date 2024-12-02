@@ -1,14 +1,4 @@
 # ⭐ Submission Portal Project
-
-## 📑 Table of Contents
-
-1. [Links](#-links)
-2. [Description](#-description)
-3. [Used Technologies](#-used-technologies)
-4. [Quick Start](#-quick-start)
-5. [Run Tests](#-run-tests)
-6. [Additional Information](#-additional-information)
-
 ---
 
 ### 🔗 **Links:**
@@ -57,7 +47,7 @@ npm install
 npm run dev
 ```
 
-4. **Open** [http://localhost:3000/](vscode-file://vscode-app/c:/Users/iccc9/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html) **in your browser** to view the app.
+4. **Open** `http://localhost:3000/` **in your browser** to view the app.
 
 ### 🧪 **Run Tests:**
 
