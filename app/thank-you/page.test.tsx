@@ -1,7 +1,7 @@
-import '@testing-library/jest-dom' // Import this to extend Jest matchers
+import '@testing-library/jest-dom'; // Import this to extend Jest matchers
 import { render, screen } from '@testing-library/react'
 import { useSearchParams } from 'next/navigation'
-import Home from './page'
+import ThankYouPage from './page'
 
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(),
@@ -31,7 +31,7 @@ describe('Home', () => {
   })
 
   it('displays the correct confirmation message', () => {
-    render(<Home />)
+    render(<ThankYouPage />)
 
     expect(
       screen.getByText('Thank you for your submission!')
@@ -42,7 +42,7 @@ describe('Home', () => {
   })
 
   it('displays the correct user data', () => {
-    render(<Home />)
+    render(<ThankYouPage />)
 
     expect(screen.getByText(/Name: John Doe/)).toBeInTheDocument()
     expect(screen.getByText(/Email: john@example.com/)).toBeInTheDocument()
@@ -52,7 +52,7 @@ describe('Home', () => {
       )
     ).toBeInTheDocument()
     expect(
-      screen.getByText(/GitHub URL: https:\/\/github\.com\/johndoe\/assignment/)
+      screen.getByText(/GitHub Repo URL: https:\/\/github\.com\/johndoe\/assignment/)
     ).toBeInTheDocument()
     expect(screen.getByText(/Candidate Level: Junior/)).toBeInTheDocument()
   })
