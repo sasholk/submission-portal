@@ -28,7 +28,7 @@
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/yourusername/submission-portal.git
+git clone https://github.com/sasholk/submission-portal.git
 ```
 
 ```bash
